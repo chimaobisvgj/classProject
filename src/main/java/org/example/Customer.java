@@ -6,21 +6,35 @@ package org.example;
  */
 public class Customer {
 
+    private String username;
     private String name;
     private String email;
     private double balance;
+    private boolean loggedIn;
 
     /**
      * Constructs a new Customer object.
      *
+     * @param username the customer's unique username
      * @param name     the customer's full name
      * @param email    the customer's email address
      * @param balance  the current balance available for purchases
      */
-    public Customer(String name, String email, double balance) {
+    public Customer(String username, String name, String email, double balance) {
+        this.username = username;
         this.name = name;
         this.email = email;
         this.balance = balance;
+        this.loggedIn = false;
+    }
+
+    /**
+     * Returns the customer's username.
+     *
+     * @return the username
+     */
+    public String getUsername() {
+        return username;
     }
 
     /**
@@ -51,6 +65,24 @@ public class Customer {
     }
 
     /**
+     * Checks if the customer is logged in.
+     *
+     * @return true if logged in, false otherwise
+     */
+    public boolean isLoggedIn() {
+        return loggedIn;
+    }
+
+    /**
+     * Sets the login status of the customer.
+     *
+     * @param loggedIn the login status
+     */
+    public void setLoggedIn(boolean loggedIn) {
+        this.loggedIn = loggedIn;
+    }
+
+    /**
      * Deducts an amount from the customer's balance.
      *
      * @param amount the amount to deduct
@@ -70,6 +102,6 @@ public class Customer {
      */
     @Override
     public String toString() {
-        return name + " (" + email + ") - Balance: $" + balance;
+        return username + " - " + name + " (" + email + ") - Balance: $" + balance + (loggedIn ? " [Logged In]" : " [Logged Out]");
     }
 }

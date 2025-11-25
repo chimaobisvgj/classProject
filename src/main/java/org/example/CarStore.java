@@ -4,7 +4,9 @@ import org.example.Car;
 import org.example.Customer;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Represents an online car store system where customers can view and buy cars.
@@ -13,12 +15,14 @@ import java.util.List;
 public class CarStore {
 
     private List<Car> cars;
+    private Map<String, Customer> loggedInCustomers;
 
     /**
      * Constructs a new CarStore with an empty car list.
      */
     public CarStore() {
         cars = new ArrayList<>();
+        loggedInCustomers = new HashMap<>();
     }
 
     /**
@@ -28,6 +32,51 @@ public class CarStore {
      */
     public void addCar(Car car) {
         cars.add(car);
+    }
+
+    /**
+     * Logs in a customer to the store.
+     *
+     * @param customer the customer to log in
+     * @throws IllegalStateException if the username is already logged in
+     */
+    public void login(Customer customer) {
+        if (loggedInCustomers.containsKey(customer.getUsername())) {
+            throw new IllegalStateException("Username '" + customer.getUsername() + "' is already logged in");
+        }
+        customer.setLoggedIn(true);
+        loggedInCustomers.put(customer.getUsername(), customer);
+    }
+
+    /**
+     * Logs out a customer from the store.
+     *
+     * @param username the username of the customer to log out
+     */
+    public void logout(String username) {
+        Customer customer = loggedInCustomers.remove(username);
+        if (customer != null) {
+            customer.setLoggedIn(false);
+        }
+    }
+
+    /**
+     * Gets a logged-in customer by username.
+     *
+     * @param username the username to search for
+     * @return the customer if logged in, null otherwise
+     */
+    public Customer getLoggedInCustomer(String username) {
+        return loggedInCustomers.get(username);
+    }
+
+    /**
+     * Returns the number of logged-in customers.
+     *
+     * @return the count of logged-in customers
+     */
+    public int getLoggedInCustomerCount() {
+        return loggedInCustomers.size();
     }
 
     /**
@@ -73,7 +122,8 @@ public class CarStore {
         store.addCar(new Car("Toyota", "Camry", 28000, true));
         store.addCar(new Car("Tesla", "Model 3", 40000, true));
 
-        Customer customer = new Customer("Alice Johnson", "alice@email.com", 50000);
+        Customer customer = new Customer("alice_j", "Alice Johnson", "alice@email.com", 50000);
+        store.login(customer);
 
         store.displayCars();
         store.purchaseCar(customer, "Camry");
